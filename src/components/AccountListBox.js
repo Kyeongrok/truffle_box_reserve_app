@@ -9,7 +9,6 @@ class AccountListBox extends React.Component {
         if(this.props.accountList != null){
             list = this.props.accountList;
         }
-        console.log(list);
         return(
             <select onChange={this.handleChange.bind(this)}>
                 {list.map((arItem)=><option key={arItem}>{arItem}</option>)}

@@ -7,7 +7,7 @@ class RoomListBox extends React.Component {
         if(this.props.roomList != null){
             list = this.props.roomList;
         }
-        console.log(this.props)
+
         return(
             <table>
                 <thead>

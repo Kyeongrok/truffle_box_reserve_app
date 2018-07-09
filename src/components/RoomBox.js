@@ -10,7 +10,8 @@ class RoomBox extends React.Component {
         }
     }
     hello(){
-        this.props.reservationInstance.registRoom(this.state.roomName, this.state.roomPrice, {gas: 300000})
+        this.props.reservationInstance.registRoom(
+            this.state.roomName, this.state.roomPrice, "hello")
     }
     handleChangeName(event){
         this.setState({roomName: event.target.value});

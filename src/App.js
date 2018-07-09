@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import TemaToken from '../build/contracts/TemaToken.json'
 import TemaTokenMarket from '../build/contracts/TemaTokenMarket.json'
 import Reservation from '../build/contracts/Reservation.json'
@@ -25,7 +25,7 @@ class App extends React.Component {
             "reservationInstance": null
         }
 
-        this.handleChangeDefaultAccount = this.handleChangeDefaultAccount.bind(this);
+        this.handleChangeDefaultAccount = this.handleChangeDefaultAccount
 
 
     }
@@ -57,31 +57,42 @@ class App extends React.Component {
         temaToken.setProvider(this.state.web3.currentProvider);
         reservation.setProvider(this.state.web3.currentProvider);
 
+        let defaultAccount = this.state.web3.eth.accounts[0];
+        // this.state.web3.eth.defaultAccount = defaultAccount;
+
+        console.log(defaultAccount);
+
+        let gas = this.state.web3
+        //.getBlock("pending").gasLimit
+        console.log("gas:",gas);
+        // // var reservationInstance = reservation.deployed();
+        // reservationInstance.registRoom("hello", 100, "http");
+
+        reservation.deployed().then(instance=>{
+           //instance.registRoom("hello", 100, "http");
+        });
+
+
         // Get accounts.
-        this.state.web3.eth.getAccounts( async (error, accounts) => {
-            this.state.web3.eth.defaultAccount = accounts[5];
-            var reservationInstance = await reservation.deployed();
-            this.reservationInstance = reservationInstance;
-            this.temaTokenInstance = await temaToken.deployed();
-            this.temaTokenMarketInstance = await temaTokenMarket.deployed();
+        // this.temaTokenInstance = temaToken.deployed();
+        // this.temaTokenMarketInstance = temaTokenMarket.deployed();
 
-            if (await this.temaTokenInstance.owner() !== this.temaTokenMarketInstance.address) {
-                console.log(this.temaTokenMarketInstance.address);
-                this.temaTokenInstance.transferOwnership(this.temaTokenMarketInstance.address);
-            }
+        // if (await this.temaTokenInstance.owner() !== this.temaTokenMarketInstance.address) {
+        //     console.log(this.temaTokenMarketInstance.address);
+        //     this.temaTokenInstance.transferOwnership(this.temaTokenMarketInstance.address);
+        // }
+        //
 
-            let defaultAccount = accounts[2];
-            // this.temaTokenInstance.balanceOf(defaultAccount)
-            //     .then(balance=>console.log("bal:",balance));
+        // // this.temaTokenInstance.balanceOf(defaultAccount)
+        // //     .then(balance=>console.log("bal:",balance));
+        //
+        // var roomList = await this.getRoomList();
+        // this.setState({
+        //     roomList1: roomList,
+        //     "defaultAccount":defaultAccount,
+        //     "reservationInstance": reservationInstance
+        // })
 
-            var roomList = await this.getRoomList();
-            this.setState({
-                roomList1: roomList,
-                accountList: accounts,
-                "defaultAccount":defaultAccount,
-                "reservationInstance": reservationInstance
-            })
-        })
     }
 
     // rooms
@@ -140,9 +151,15 @@ class App extends React.Component {
     }
 
     handleChangeDefaultAccount(account){
-        console.log("acct:", account);
+
     }
     render() {
+        let accounts = [];
+        if(this.state.web3 !=null){
+            accounts = this.state.web3.eth.accounts;
+            console.log(accounts);
+        }
+
         return (
             <div className="App">
                 <nav className="navbar pure-menu pure-menu-horizontal">
@@ -154,7 +171,7 @@ class App extends React.Component {
                         <div className="pure-u-1-1">
                             <h1>Tema Token!</h1>
                             <p>테마 토큰 호텔 예약 D앱 입니다.</p>
-                            <AccountListBox handleChangeDefaultAccount={this.handleChangeDefaultAccount} accountList={this.state.accountList}/>
+                            <AccountListBox handleChangeDefaultAccount={this.handleChangeDefaultAccount} accountList={accounts}/>
                             <h3>방목록 보기</h3>
                             <RoomListBox roomList={this.state.roomList1} name="hello"/>
                             <RoomBox reservationInstance={this.state.reservationInstance}/>
